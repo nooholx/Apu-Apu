@@ -1,0 +1,172 @@
+
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>::: 아푸아푸 :::</title>
+
+    <link rel="stylesheet" href="/static/loginapp/css/main.css">
+
+</head>
+<body>
+  <div class="pl">
+  <div class="pl">
+    <div class="pl__outer-ring"></div>
+    <div class="pl__inner-ring"></div>
+    <div class="pl__track-cover"></div>
+    <div class="pl__ball">
+      <div class="pl__ball-texture"></div>
+      <div class="pl__ball-outer-shadow"></div>
+      <div class="pl__ball-inner-shadow"></div>
+      <div class="pl__ball-side-shadows"></div>
+    </div>
+  </div>
+{% comment %} 네이버로그인!!!!!!!!!!!!!! {% endcomment %}
+<div class="container">
+  
+  <div class="login-area">
+    <div id="message">
+      
+    </div>
+    <div id="button_area">
+      <div id="naverIdLogin"></div>
+    </div>
+  </div>
+</div>
+<script src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js" charset="utf-8"></script>
+<script type="text/javascript">
+
+const naverLogin = new naver.LoginWithNaverId(
+ {
+  clientId: "bgknhSZVdRoLZc0mywOO",
+  callbackUrl: "http://127.0.0.1:8000/login/login2/",
+  loginButton: {color: "green", type: 3, height: 60}
+  }
+ );
+
+
+  naverLogin.init();
+  naverLogin.getLoginStatus(function (status) {
+    if (status) {
+        const nickName=naverLogin.user.getNickName();
+        const age=naverLogin.user.getAge();
+        const birthday=naverLogin.user.getBirthday();
+
+        if(nickName===null||nickName===undefined ){
+          alert("별명이 필요합니다. 정보제공을 동의해주세요.");
+          naverLogin.reprompt();
+          return ;  
+       }else{
+        setLoginStatus();
+       }
+  }
+  });
+  console.log(naverLogin);
+
+  function setLoginStatus(){
+
+    const message_area=document.getElementById('message');
+    message_area.innerHTML=`
+    <h3> Login 성공 </h3>
+    <div>user Nickname : ${naverLogin.user.nickname}</div>
+    <div>user Age(범위) : ${naverLogin.user.age}</div>
+    <div>user Birthday : ${naverLogin.user.birthday}</div>
+    `;
+
+    const button_area=document.getElementById('button_area');
+    button_area.innerHTML="<button id='btn_logout'>로그아웃</button>";
+
+    const logout=document.getElementById('btn_logout');
+    logout.addEventListener('click',(e)=>{
+      naverLogin.logout();
+  location.replace("http://127.0.0.1:8000/login/login2/");
+    })
+  }
+
+
+
+
+
+
+</script>
+
+
+
+
+{% comment %} 카카오로그인 {% endcomment %}
+
+<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.1.0/kakao.min.js"
+  integrity="sha384-dpu02ieKC6NUeKFoGMOKz6102CLEWi9+5RQjWSV0ikYSFFd8M3Wp2reIcquJOemx" crossorigin="anonymous"></script>
+<script>
+  Kakao.init('f27aec315decb3cd2b9809072cb2256b'); // 사용하려는 앱의 JavaScript 키 입력
+</script>
+
+<a id="kakao-login-btn" href="javascript:loginWithKakao()">
+  <img src="https://i.postimg.cc/d0HN92nD/1.png" width="277"
+    alt="카카오 로그인 버튼" />
+</a>
+<p id="token-result"></p>
+
+<script>
+  function loginWithKakao() {
+    Kakao.Auth.authorize({
+      redirectUri: 'https://developers.kakao.com/tool/demo/oauth',
+    });
+  }
+
+  function requestUserInfo() {
+    Kakao.API.request({
+      url: '/v2/user/me',
+    })
+      .then(function(res) {
+        alert(JSON.stringify(res));
+      })
+      .catch(function(err) {
+        alert(
+          'failed to request user information: ' + JSON.stringify(err)
+        );
+      });
+  }
+  
+  // 아래는 데모를 위한 UI 코드입니다.
+  displayToken()
+  function displayToken() {
+    var token = getCookie('authorize-access-token');
+
+    if(token) {
+      Kakao.Auth.setAccessToken(token);
+      Kakao.Auth.getStatusInfo()
+        .then(function(res) {
+          if (res.status === 'connected') {
+            document.getElementById('token-result').innerText
+              = 'login success, token: ' + Kakao.Auth.getAccessToken();
+          }
+        })
+        .catch(function(err) {
+          Kakao.Auth.setAccessToken(null);
+        });
+    }
+  }
+
+  function getCookie(name) {
+    var parts = document.cookie.split(name + '=');
+    if (parts.length === 2) { return parts[1].split(';')[0]; }
+  }
+</script>
+</div>
+   
+  
+  
+  
+
+
+
+
+
+
+
+
+</body>
+</html>

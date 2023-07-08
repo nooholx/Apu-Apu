@@ -1,0 +1,58 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<head>
+    <title>::: 공지사항 {{ board_list.b_title }} :::</title>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'boardapp/assets/vendor/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="/static/mainapp/css/main.css">
+    
+    <style>
+        a{
+            color: #40403F;
+            text-decoration:none;
+        }
+    </style>
+
+    <script type = "text/javascript">
+        function goBack(){
+            history.go(-1);
+        }
+    </script>
+</head>
+<body>
+    {% include 'mainapp/include/nav.html' %}
+    <section id="intro">
+        <div id="intro-title">
+            <b>
+                <div>
+                    <p><br/><a class="index" href="/"> 아 푸 아 푸</a></p>
+                </div>
+            </b>
+        </div>
+    </section>
+
+    <div class="container my-3">
+        <div class="container text-center">
+            <h4 class="border-bottom py-2">{{ board_list.b_title }}</h4>
+        </div>
+        <div class="card my-3">
+            <div class="card-body">
+                <div class="card-text" style="white-space: pre-line;">작성자 : {{ board_list.b_writer }}</div>
+            </div>
+        </div>
+        
+        <div class="card my-3">
+            <div class="card-body">
+                <div class="card-text" style="white-space: pre-line;">{{ board_list.b_note }}</div>
+                <br><br>
+                <div class="card-text" style="white-space: pre-line;"><b>※링크 바로가기</b> : <a href="{{ board_list.b_link }}">{{ board_list.b_link }}</a></div>
+                <div class="d-flex justify-content-end">
+                    <div class="badge p-2" style="background-color: black; color: white;">{{ board_list.b_date }}</div>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-dark"; onClick="goBack()">뒤로가기</button>
+    </div>
+</body>

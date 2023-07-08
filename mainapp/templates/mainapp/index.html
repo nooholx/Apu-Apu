@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<head>
+    <title>::: 아푸아푸 :::</title>
+    <link rel="stylesheet" href="/static/mainapp/css/search.css">
+    <link rel="stylesheet" href="/static/mainapp/css/main.css">
+
+    <style>
+        /* table 스타일 */
+        table {border-collapse: collapse;
+            width: 100%;}
+
+        /* th, td 스타일 */
+        th, td{
+            padding : 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        #three{padding: 10%;}
+        #four{padding: 10%;}
+    </style>
+
+    <script type = 'text/javascript'>
+        function getsearch(keyword, search_option){
+            url = '/apu-apu/seach_list/?';
+            url = url + 'keyword=' + keyword.value + '&search_option=' + search_option;
+            search.action = url;
+        }
+
+        function showPopup(pharmacy_addr, pharmacy_name ) {
+            var windowOptions = "width=400, height=400, left=500, top=250";
+            var url = "disposal/map_popup?pharmacy_addr=" + encodeURIComponent(pharmacy_addr) + "&pharmacy_name=" + encodeURIComponent(pharmacy_name);
+            url = url.replace("main/index/", "");
+            url = 'http://127.0.0.1:8000/' + url
+            var popupWindow = window.open(url, "map_popup", windowOptions);
+        }
+    </script>
+    
+</head>
+<body>
+    <!-- partial:index.partial.html -->
+    <section id="intro" class="page">
+        <div id="intro-title">
+            <div>
+                <b>아 푸 아 푸</b><br/><br/>
+                <!-- 검색창 -->
+                <div class="container">
+                    <form autocomplete="off"method="get" id="search" name="search" action="#" top="50%">
+                        <div class="finder">
+                            <div class="finder__outer">
+                                <div class="finder__inner">
+                                    <div class="finder__icon" ref="icon"></div>
+                                    <input class="form-control" type="text" id="keyword" name="keyword"/>
+                                    <select class="form-select" id="search_option" name="search_option">
+                                        <option value="itemName" selected >약명</option>
+                                        <option value="entpName">제약회사</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-outline-secondary" type="submit" onclick="getsearch(keyword, search_option)"></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- 검색 끝 -->
+            </div>
+        </div>
+        <div id="intro-description">
+            <br/>당신의 복용약을 관리해 드립니다
+        </div>
+    </section>
+    
+    <nav>  
+        <a class="menu-btn">
+            <svg t="1583388234559" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2279" width="16" height="16"><path d="M128 213.34016l768 0q17.67424 0 30.16704 12.4928t12.4928 30.16704-12.4928 30.16704-30.16704 12.4928l-768 0q-17.67424 0-30.16704-12.4928t-12.4928-30.16704 12.4928-30.16704 30.16704-12.4928zM128 725.34016l768 0q17.67424 0 30.16704 12.4928t12.4928 30.16704-12.4928 30.16704-30.16704 12.4928l-768 0q-17.67424 0-30.16704-12.4928t-12.4928-30.16704 12.4928-30.16704 30.16704-12.4928zM128 469.34016l768 0q17.67424 0 30.16704 12.4928t12.4928 30.16704-12.4928 30.16704-30.16704 12.4928l-768 0q-17.67424 0-30.16704-12.4928t-12.4928-30.16704 12.4928-30.16704 30.16704-12.4928z" p-id="2280" fill="#40403F"></path></svg>
+        </a>
+        <a class="tab placeholder"></a>
+        <a class="tab" data-text="약 등록" href="/apu-apu/add_pill/">약 등록</a>
+        <a class="tab" data-text="내 약 조회" href="/apu-apu/my_list">내 약 조회</a>
+        <a class="tab" data-text="공지사항" href="{% url 'www_board:board_list' %}">공지사항</a>
+        <a class="tab" data-text="폐의약품 처리" href="/disposal/disposal_list/">폐의약품 처리</a>
+        <a class="tab" data-text="LOGIN / SIGN UP" id="user-btn">LOGIN / SIGN UP</a>
+    </nav>
+
+    <a name="one"></a>
+    <section class="page content-page">  
+        <div>
+            <a href = 'main/register'>PAGE ONE</a>
+        </div>
+    </section>
+
+    <a name="two"></a>
+    <section name="two" class="page content-page">
+        <div>
+            PAGE TWO
+        </div>
+    </section>
+    <hr/>
+    <a name="three"> 공지사항 </a>
+    <section name="three" class="page content-page" id="three">
+        <!-- 게시판 리스트  -->
+        <div class="container my-3">
+            <table class="table">
+                <thead>
+                    <tr class="thead-dark">
+                        <th>번호</th><th>제목</th><th>작성일시</th><th>작성자</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% if rsBoard %}
+                    {% for rs in rsBoard %}
+                    <tr>
+                        <!-- 번호 = 전체건수 - 시작인덱스 - 현재인덱스 + 1 -->
+                        <<td>{{ rs.b_no }}</td>
+                        <td><a href="{% url 'www_board:detail' rs.b_no %}"
+                            style="text-decoration-line: none; color : black;">{{ rs.b_title }}</a></td>
+                        <td>{{ rs.b_date }}</td>
+                        <td>{{ rs.b_writer }}</td>>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                <tr><td colspan="3">게시물이 없습니다.</td></tr>
+                {% endif %}
+                </tbody>
+            </table>
+            <br/>
+            <a href="{% url 'www_board:board_list' %}" style="color:black; text-decoration-line : none"> 더보기 </a>
+        </div>
+    </section>
+
+    <br/><br/>
+    <hr/>
+    <a name="four">폐의약품 처리</a>
+    <section name="four" id="four" class="page content-page">
+        <!-- 폐의약품 수거 약국 리스트 -->
+        <div class="container my-3">
+            <table class="table">
+                <tr class="thead-dark">
+                    <th>연번</th>
+                    <th>시군구</th>
+                    <th>약국명</th>
+                    <th>전화번호</th>
+                    <th>소재지</th>
+                </tr>
+                
+                {% for info in res.values %}
+                    {% if forloop.counter <= 5 %}
+                        <tr>
+                            <td>{{ info.연번 }}</td>
+                            <td>{{ info.시군구 }}</td>
+                            <td><a href="#" 
+                                onclick="showPopup('{{ info.소재지 }}', '{{ info.약국명 }}'); return false;" 
+                                style="text-decoration-line: none; color : black;">
+                                {{ info.약국명 }}</a></td>
+                            <td>{{ info.전화번호 }}</td>
+                            <td>{{ info.소재지 }}</td>
+                        </tr>
+                    {% endif %}        
+                {% endfor %}
+            </table>
+            <br/>
+            <a href="/disposal/disposal_list/" style="color:black; text-decoration-line : none"> 더보기 </a>
+        <div>
+    </section>
+    <script  src="/static/mainapp/js/main.js"></script>
+    <!-- <script  src="/static/mainapp/js/search.js"></script> -->
+</body>
+</html>

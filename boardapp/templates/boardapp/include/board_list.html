@@ -1,0 +1,104 @@
+{% load boardapp.board_filter %}
+{% load static %}
+<!DOCTYPE html>
+<head>
+    <title>::: 공지사항 :::</title>
+
+    <link rel="stylesheet" href="/static/mainapp/css/main.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" 
+            rel="stylesheet" 
+            integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" 
+            crossorigin="anonymous">
+    
+    <style>
+        a{
+            color: #40403F;
+            text-decoration:none;
+            }
+    </style>
+</head>
+<body>
+    {% include 'mainapp/include/nav.html' %}
+    <section id="intro">
+        <div id="intro-title">
+            <b>
+                <div>
+                    <p><br/><a class="index" href="/"> 아 푸 아 푸</a></p>
+                </div>
+            </b>
+        </div>
+        <h3 style="font-size:20px;"> 공지사항 </h3>
+    </section>
+    <hr/>
+    
+
+    <div class="container text-center" style='width:100%;'> 
+        <div class="container my-3">
+            <table class="table">
+                <tr class="thead-dark">
+                    <th>번호</th><th>제목</th><th>작성일시</th><th>작성자</th>
+                </tr>
+                {% if rsBoard %}
+                    {% for rs in rsBoard %}
+                        <tr>
+                            <!-- 번호 = 전체건수 - 시작인덱스 - 현재인덱스 + 1 -->
+                            <td>{{ rsBoard.paginator.count|sub:rsBoard.start_index|sub:forloop.counter0|add:1 }}</td>
+                            <td><a href="{% url 'www_board:detail' rs.b_no %}">{{ rs.b_title }}</a></td>
+                            <td>{{ rs.b_date }}</td>
+                            <td>{{ rs.b_writer }}</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                <tr><td colspan="3">게시물이 없습니다.</td></tr>
+                {% endif %}
+            </table>
+        
+            <!-- 페이징처리 시작 -->
+            <ul class="pagination justify-content-center">
+                <!-- 이전페이지 -->
+                {% if rsBoard.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ rsBoard.previous_page_number }}">이전</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+                </li>
+                {% endif %}
+    
+                <!-- 페이지리스트 -->
+                {% for page_number in rsBoard.paginator.page_range %}
+                {% if page_number >= rsBoard.number|add:-5 and page_number <= rsBoard.number|add:5 %}
+                    {% if page_number == rsBoard.number %}
+                    <li class="page-item active" aria-current="page">
+                        <a class="page-link" href="?page={{ page_number }}" >{{ page_number }}</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item" >
+                        <a class="page-link" href="?page={{ page_number }}" >{{ page_number }}</a>
+                    </li>
+                    {% endif %}
+                {% endif %}
+                {% endfor %}
+    
+                <!-- 다음페이지 -->
+                {% if rsBoard.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ rsBoard.next_page_number }}">다음</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+                </li>
+                {% endif %}
+            </ul>
+            <!-- 페이징처리 끝 -->
+        </div>
+    </div>
+</body>
+
+
+
+
+
+

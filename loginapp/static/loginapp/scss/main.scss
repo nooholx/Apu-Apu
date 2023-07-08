@@ -1,0 +1,182 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:300|Spartan&display=swap');
+
+* {
+  font-family: 'Montserrat', serif;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #F8F8F8;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+@mixin flex-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+$nav-height: 4.5rem;
+$primary-color: #40403F;
+$secondary-color: #81B29A;
+$md: 720px;
+
+.page {  
+  color: $primary-color;  
+  width: 100vw;
+  height: calc(100vh - #{$nav-height});
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin: 0;  
+  @include flex-center;
+}
+
+nav ~ .content-page {
+  margin-top: $nav-height;
+}
+
+.content-page {
+  font-size: 1.75rem;  
+}
+
+#intro { 
+  text-align: center;
+  @media (max-width: $md) {
+    margin-top: $nav-height;
+  }
+  & > #intro-title {
+    font-size: 1.75rem;
+    margin-bottom: 2rem;
+  }
+  
+  & > #intro-description {
+    font-size: 1rem;
+  }
+}
+
+nav {
+  position: absolute;
+  top: calc(100vh - #{$nav-height});  
+  width: 100vw;
+  min-height: $nav-height;
+  background: white;
+  box-shadow: 0 -2px 1rem #CFD2CD;
+  display: flex;  
+  justify-content: space-around;
+  align-items: center; 
+  
+  @media (max-width: $md) {
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    top: 0;      
+    height: 100vh;   
+    width: initial;
+  }
+  
+  & a {
+    position: relative;
+    background: transparent;    
+    text-align: center;
+    height: $nav-height;
+    text-decoration: none;
+    color: $primary-color;
+    
+    @media (max-width: $md) {
+      width: 100%;
+      margin: auto;
+      padding: 0 1.5rem;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    &.menu-btn {
+      position: fixed;
+      top: 0;
+      z-index: 1000;
+      
+      @media (min-width: $md){
+        display: none;  
+      }
+    }
+    
+    &#user-btn {
+      color: $secondary-color;
+    }
+    
+    &.tab {
+      &:not(.placeholder) {
+        &, &::after {      
+          border: none;
+          outline: none;
+          cursor: pointer;
+          flex: 1;
+          line-height: $nav-height;
+          font-size: 1rem;
+          vertical-align: center;
+        }
+
+        &::before, &::after {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          opacity: 0;
+        }
+
+        &::before {
+          content: "";
+          border-bottom: solid 2px $secondary-color;
+          transition: 0.5s ease;
+          z-index: 1000;
+          @media (max-width: $md) {
+            display: none;
+          }
+        }
+
+        &::after {      
+          content: attr(data-text);
+          color: white;
+          background: $secondary-color; 
+
+          @media (max-width: $md) {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 0 1.5rem;
+          }
+        }    
+
+        &:hover::after {
+          opacity: 1;
+          transition: 0.5s ease;
+        }
+
+        &.active::before {
+          opacity: 1;
+          transition: 0.5s ease;
+        }
+      }
+      
+      &.hidden {
+        display: none;
+      }
+    }
+  }
+  
+  &.hidden {
+    transform: translateX(-100%);
+  }
+}

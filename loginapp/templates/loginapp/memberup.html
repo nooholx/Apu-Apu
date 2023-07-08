@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+{% load static %}
+
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>::: Log In / Sign Up  :::</title>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css'>
+    <link rel="stylesheet" href="/static/loginapp/css/signup.css">
+
+</head>
+<body>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+    {% comment %}템플릿  {% endcomment %}
+<!-- partial:index.partial.html -->
+<div class="container">
+    <div class="move">
+      <div class="p-button normal signin animated pulse">SIGN IN</div>
+      <div class="p-button normal signin animated pulse">Log out</div>
+    </div>
+    <div class="welcome">
+      <h4 class="bold welcome-text">Welcome Back!</h4>
+      <p class="normal text">To keep connected with us please login with your personal info</p>
+    </div>
+    <div class="hello">
+      <h4 class="bold welcome-text">Hello Friend</h4>
+      <p class="normal text">Enter your personal details and start journey with us</p>
+    </div>
+    <div class="form">
+      <h4 class="bold title">Create Account</h4>
+      {% comment %} <div class="icons">
+        <div class="icon"><i class="fab fa-facebook-f"></i></div>
+        <div class="icon"><i class="fab fa-github"></i></div>
+        <div class="icon"><i class="fab fa-twitter"></i></div>
+      </div> {% endcomment %}
+      <p class="normal light">Or use your email for registration</p>
+      <input type="text" placeholder="ID" class="normal name">
+      <input type="text" placeholder="Email" class="normal">
+      <br/>
+      <input type="password" placeholder="Password" class="normal"><br>
+      <p class="normal forgot">Forgot your password?</p>
+      <button class="b-button normal">SIGN UP</button>
+    </div>
+  </div>
+  <!-- partial -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+  <script src='https://kit.fontawesome.com/3eee069757.js'></script>
+  <script  src="/static/loginapp/js/signup.js"></script>
+{% comment %} 템플릿 {% endcomment %}
+    
+    
+    
+    
+    
+    
+   
+</body>
+</html>

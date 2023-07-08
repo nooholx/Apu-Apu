@@ -1,0 +1,17 @@
+<script src="/static/mainapp/js/main.js" defer></script>
+    <link rel="stylesheet" href="/static/mainapp/css/main.css">
+    <script type = 'text/javascript'
+        src = "https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+<nav>  
+    <a class="menu-btn">
+        <svg t="1583388234559" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2279" width="16" height="16"><path d="M128 213.34016l768 0q17.67424 0 30.16704 12.4928t12.4928 30.16704-12.4928 30.16704-30.16704 12.4928l-768 0q-17.67424 0-30.16704-12.4928t-12.4928-30.16704 12.4928-30.16704 30.16704-12.4928zM128 725.34016l768 0q17.67424 0 30.16704 12.4928t12.4928 30.16704-12.4928 30.16704-30.16704 12.4928l-768 0q-17.67424 0-30.16704-12.4928t-12.4928-30.16704 12.4928-30.16704 30.16704-12.4928zM128 469.34016l768 0q17.67424 0 30.16704 12.4928t12.4928 30.16704-12.4928 30.16704-30.16704 12.4928l-768 0q-17.67424 0-30.16704-12.4928t-12.4928-30.16704 12.4928-30.16704 30.16704-12.4928z" p-id="2280" fill="#40403F"></path></svg>
+    </a>
+    <a class="tab placeholder"></a>
+    <a class="tab" data-text="홈" href="{% url 'main:index' %}">홈</a>
+    <a class="tab" data-text="약 등록" href="/apu-apu/add_pill">약 등록</a>
+    <a class="tab" data-text="내 약 조회" href="/apu-apu/my_list">내 약 조회</a>
+    <a class="tab" data-text="공지사항" href="{% url 'www_board:board_list' %}">공지사항</a>
+    <a class="tab" data-text="폐의약품 처리" href="/disposal/disposal_list/?city=&page=1">폐의약품 처리</a>
+    <a class="tab" data-text="LOGIN / SIGN UP" id="user-btn">LOGIN / SIGN UP</a>
+</nav>

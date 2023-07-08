@@ -1,0 +1,223 @@
+{% load static %}
+{% include 'mainapp/include/nav.html' %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>::: 폐의약품 처리 :::</title>
+    
+    <style>
+        a.index{
+            color: #40403F;
+            text-decoration:none;
+            }
+    </style>
+
+    <script type="text/javascript">
+        function checkBase(){
+            fm = document.getElementById("fm");
+            for(i=0; i < fm.city.length; i++) {
+                if(fm.city[i].value == "광주전체"){
+                    fm.city[i].checked = false;
+                }
+            }
+        }
+
+        //-- 전국을 체크한 경우 체크된 다른 지역의 체크 해제처리
+        function checkBoxClean(){
+            fm = document.getElementById("fm");
+
+            //-- 전국을 제외한 나머지 지역은 체크 해제하기
+            for(i=0; i < fm.city.length; i++) {
+                if(fm.city[i].value != "광주전체"){
+                    fm.city[i].checked = false;
+                }
+            }
+        }
+        
+        //-- 조회하기 처리
+        function goList2(page)  {
+            
+            if (typeof page === 'undefined' || isNaN(parseInt(page))) {
+                // Set the page value to 1 as the default
+                page = 1;
+            } else {
+                // Parse the page value as an integer
+                page = parseInt(page);
+            }
+            
+            // 선택된 목록 가져오기
+            fm = document.getElementById("fm");
+            // 체크된 항목만 추출하기
+            str_all = "";
+            for(i=0; i < fm.city.length; i++) {
+                if(fm.city[i].checked == true){
+                    str_all += fm.city[i].value + ",";
+                }
+            }
+            if(str_all != "" | str_all != "전국"){
+                str_all = str_all.slice(0, -1);
+            }else{
+                str_all = 'no';
+            }
+            
+            // 선택된 city(= str_all)과 현재페이지 정보를 url값으로 넘기기 위함
+            url = '/disposal/disposal_list/?';
+            url = url + "city=" + str_all;
+            url = url + "&page=" + page;
+            //alert(url);
+            location.href = url;
+        }
+        
+
+        function checkedInit(checked_city){
+            fm = document.getElementById("fm");
+            
+            split_list = checked_city.split(",");
+
+            //-- 전국을 제외한 나머지 지역은 체크 해제하기
+            for(i=0; i < fm.city.length; i++) {
+                for(j=0; j < split_list.length; j++){
+                    if(fm.city[i].value == split_list[j]){
+                        //alert(split_list[j]);
+                        fm.city[i].checked = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        function showPopup(pharmacy_addr, pharmacy_name ) {
+            var windowOptions = "width=400, height=400, left=500, top=250";
+            var url = "../map_popup?pharmacy_addr=" + encodeURIComponent(pharmacy_addr) + "&pharmacy_name=" + encodeURIComponent(pharmacy_name);
+            var popupWindow = window.open(url, "map_popup", windowOptions);
+        }
+    </script>
+    
+    <!-- css 외부파일 또는 CDN 불러들이기 -->
+    <link rel="stylesheet" href="/static/mainapp/css/main.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" 
+            rel="stylesheet" 
+            integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" 
+            crossorigin="anonymous">
+</head>
+
+
+<body onload="checkedInit('{{city}}')">
+    {% include 'mainapp/include/nav.html' %}
+    <section id="intro">
+        <div id="intro-title">
+            <b>
+                <div>
+                    <p><br/><a class="index" href="/"> 아 푸 아 푸</a></p>
+                </div>
+            </b>
+        </div>
+    </section>
+    
+    <div>
+    <div class="container text-center" style='width:100%;'>   
+        <!-- row 는 tr의 개념 -->
+        <div class="row">
+            <!-- col은 td의 개념 -->
+            <div class="col">
+                <h3 style="font-size:20px;">폐의약품 수거 정보 조회</h3>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div style="text-align : center">
+    <form id="fm" action="#" method="post">
+        {% csrf_token %}
+        <input type='checkbox' name="city" value='광산구' 
+        onclick="checkBase()"/>광산구
+        <input type='checkbox' name="city" value='남구' 
+        onclick="checkBase()"/>남구
+        <input type='checkbox' name="city" value='동구' 
+        onclick="checkBase()"/>동구
+        <input type='checkbox' name="city" value='북구' 
+        onclick="checkBase()"/>북구
+        <input type='checkbox' name="city" value='서구' 
+        onclick="checkBase()"/>서구
+
+        <input type='checkbox' name="city" value='광주전체' 
+            onclick="checkBoxClean()"/><strong>광주전체</strong>
+        <input type='button' value='조회' onclick="goList2( '{{ page }}' )">
+    </form>
+</div>
+    <hr/>    
+    <div class="container my-3">
+        <table class="table">
+            <tr class="thead-dark">
+                <th>연번</th>
+                <th>시군구</th>
+                <th>약국명</th>
+                <th>전화번호</th>
+                <th>소재지</th>
+            </tr>
+            {% for info in res_datas %}
+                <tr>
+                    <td>{{ info.연번 }}</td>
+                    <td>{{ info.시군구 }}</td>
+                    <td><a href="#" 
+                        onclick="showPopup('{{ info.소재지 }}', '{{ info.약국명 }}'); return false;" 
+                        style="text-decoration-line: none; 
+                                color : black;">
+                        {{ info.약국명 }}</a></td>
+                    <td>{{ info.전화번호 }}</td>
+                    <td>{{ info.소재지 }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    <div>
+    
+    <!--- 페이징 처리하기 Start -->
+    <div class="container text-center" style='width:100%;'> 
+        <div class="row">
+            <div class="col">
+                <p>
+                    <!-- 페이징처리 시작 -->
+                    <ul class='pagination' style="justify-content:center; font-size:12px;">
+                    {% if is_prev %}
+                        <li class="page-item">
+                            {% comment %} <a class="page-link" href="javascript:goList2('{{ start_page | add:'-10' }}')"> {% endcomment %}
+                                <a class="page-link" href="/disposal/disposal_list/?city={{ city_list }}&page={{ start_page | add:'-10' }}"> 
+                                <span aria-hidden="true">«</span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    <!-- 페이지 번호 10개를 보여주기 -->
+                    {% for page_number in page_range %}
+                        {% if page_number == now_page %}
+                            <li class="page-item active" aria-current="page">
+                                <a class="page-link" href="/disposal/disposal_list/?city={{ city_list }}&page={{ page_number }}" >{{ page_number }}</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item" >
+                                <a class="page-link" href="/disposal/disposal_list/?city={{ city_list }}&page={{ page_number }}" >{{ page_number }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if is_next %}
+                        <li class="page-item">
+                            <!-- <a class="page-link" href="javascript:goList2'({{ start_page | add:'10' }}')"> -->
+                            <a class="page-link" href="/disposal/disposal_list/?city={{ city_list }}&page={{ start_page | add:'10' }}">
+                                <span aria-hidden="true">»</span>
+                            </a>
+                        </li>
+                    {% endif %} 
+                    </ul>
+                    <!-- 페이징처리 끝 -->
+                </p>
+            </div>
+        </div>
+    </div>
+    <!-- End 페이징 처리 -->  
+
+</body>
+</html>

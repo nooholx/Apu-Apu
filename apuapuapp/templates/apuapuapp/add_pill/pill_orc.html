@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<head>
+    <title>search_pill</title>
+    <script type="text/javascript">
+        function go_popup_search(){
+            alert(text)
+            location.href = "/apu-apu/popup_search/?pill_name=" + text + '&page=' + page;
+        }
+    </script>
+</head>
+<body>
+    파일경로 어떻게 불러왕....
+
+    {% for text in texts %}
+    <div class ="row">
+        {{text}}
+    </div>
+    {% endfor %}
+</body>
+</html>

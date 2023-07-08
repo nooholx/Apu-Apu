@@ -1,0 +1,50 @@
+{% load static %}
+
+<!DOCTYPE html>
+<head>
+    <title>::: 내 약 조회 :::</title>
+    <link rel="stylesheet" href="/static/apuapuapp/css/main.css">
+
+    <style>
+        a.index{
+            color: #40403F;
+            text-decoration:none;
+            }
+        .content{
+            padding : 5% 10%;
+        }
+    </style>
+</head>
+<body>
+    {% include 'mainapp/include/nav.html' %}
+    <section id="intro">
+        <div id="intro-title">
+            <b>
+                <div>
+                    <p><br/><a class="index" href="/"> 아 푸 아 푸</a></p>
+                </div>
+            </b>
+        </div>
+        <h3> 내 약 목록</h3>
+    </section>
+    <hr/>
+    <div class = content>
+        이름 :
+        <br/>
+        
+        < 복용중인약 >
+        if 복용중인 약 테이블 땡겨올게 없다면 :
+        복용중인 약이 없습니다. 
+        보여주기
+        <br/>
+
+        < 복용했던 약 >
+        if 복용했던 약 테이블 땡겨올게 없다면 :
+        복용이력이 없습니다. 
+        보여주기
+        <br/>
+    </div>
+
+    <!-- <footer> kepco digeter boot camp finalproject ㅈㅈㅈ - apu_apu </footer> -->
+</body>
+</html>

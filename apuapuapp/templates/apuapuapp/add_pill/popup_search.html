@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title> popup_search </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: 'Montserrat', serif;
+            box-sizing: border-box;
+            background: #F8F8F8;
+        }
+
+        .row:hover{
+            background-color: rgb(234, 234, 232);
+        }
+        .page_link{
+            text-decoration:none;
+        }
+    </style>
+
+    <script type = 'text/javascript'>
+        function choice(itemSeq){
+            alert(itemSeq);
+            url = "/apu-apu/add_pill/?itemSeq=" + itemSeq
+            opener.location.href=url;
+            window.open('', '_self', '');
+            window.close();
+        }
+    </script>
+</head>
+<body>
+    '{{ pill_name }}' 검색결과
+    <hr/><br/>
+
+    <div>
+        {% if totalCount %}
+            {% autoescape off %}
+            {%for i in result.items %}
+                <div class="container">
+                    <div class="row" onclick="choice('{{i.itemSeq}}')">
+                        <div class="col">
+                            <img src= {{ i.itemImage }} alt="약 이미지가 아직 등록되지 않았습니다." width="100%">
+                        </div>
+                        <div class="col-8">
+                            <div class="row row-cols-1">
+                                <div class="col">{{i.itemName}}</div>
+                                <div class="col">{{i.entpName}}</div>
+                                <div class="col">{{i.efcyQesitm}}</div>
+                            </div>
+                        </div>
+                        <hr/>
+                    </div>
+                </div>
+            {%endfor%}
+            {% endautoescape %}
+
+            <!-- 페이징처리 시작 -->
+            <div class="pageing">
+                <ul class='pagination' style="justify-content:center; font-size:110%;">
+                    {% if is_prev %}
+                        <li class="page-item">
+                            <!-- start_page | add:"-10"의 계산값 = start_page - 1 -->
+                            <a class="page-link" 
+                                href='/apu-apu/popup_search/?pill_name={{pill_name}}&page={{ start_page | add:"-10" }}'>
+                                    <span aria-hidden="true">이전</span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    <!-- 페이지 번호 10개를 보여주기 -->
+                    {% for i in page_range %}
+                        <th class="page-item">
+                            <a class="page_link" href='/apu-apu/popup_search/?pill_name={{pill_name}}&page={{ i }}'>{{ i }}</a>
+                        </th>
+                    {% endfor %}
+
+                    {% if is_next %}
+                        <li class="page-item" >
+                            <!-- start_page | add:"10"의 계산값 = start_page + 1 -->
+                            <a class="page-link" 
+                                href='/apu-apu/popup_search/?pill_name={{pill_name}}&page={{ start_page | add:"10" }}'>
+                                <span aria-hidden="true">  다음</span>
+                            </a>
+                        </li> 
+                    {% endif %}
+                </ul>
+            </div>
+            <!-- 페이징처리 끝 -->
+
+        {% else %}
+            검색 결과가 없습니다.
+        {% endif %}
+    </div>
+    <br/>
+</body>
+</html>
